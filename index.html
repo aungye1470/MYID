@@ -1,18 +1,28 @@
-<!DOCTYPE html>
+<?php 
+    include('simple_html_dom.php');
+	include('config.php');
+    $inputUrl = "https://marketdata.set.or.th/mkt/marketsummary.do";
+    $html = file_get_html($inputUrl);
+    $i = 0;
+    $numArr = array();
+    foreach($html->find('td') as $e){
+        $i++;
+        if($i > 8 ) break;
+        $numArr[] = $e->innertext;
+    }
+    $result = array();
 
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>my-first-website</title>
-  <LINK href="styles.css" rel="stylesheet" type="text/css">
-</head>
+    $first = str_split($numArr[1]);
+    $second = str_split($numArr[7]);
+    $firstNum = $first[count($first)-1];
+    $pointPos = strpos($numArr[7],'.');
+    $secondNum = $second[$pointPos-1];
 
-<body>
+    
+    $result["SET"] = $numArr[1];
+    $result["VAL"] = $numArr[7];
+    $result["NUM"] = $firstNum.$secondNum;
 
-<img src="https://octodex.github.com/images/daftpunktocat-thomas.gif" id="octocat" alt="octocat-gif" />
-
-<!-- Change this code here by copy and pasting your template on line 15 -->
-<p>Welcome to your first GitHub Pages website!</p>
-
-</body>
-</html>
+    // update the number per minutes 
+    echo json_encode($result);
+?>
