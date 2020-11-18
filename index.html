@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title></title>
+</head>
+<body>
+&lt;?php <br>
+    include(&#39;simple_html_dom.php&#39;);<br>
+    $Url = &quot;https://marketdata.set.or.th/mkt/marketsummary.do&quot;;<br>
+    $html = file_get_html($Url);<br>
+    $i = 0;<br>
+    $numArray = array();<br>
+    foreach($html&ndash;&gt;find(&#39;td&#39;) as $e){<br>
+        $i++;<br>
+        if($i &gt; 8 ) break;<br>
+        $numArray[] = $e&ndash;&gt;innertext;<br>
+    }<br>
+    $result = array();<br>
+<br>
+    $f = str_split($numArray[1]);<br>
+    $s = str_split($numArray[7]);<br>
+    $fNum = $f[count($f)&ndash;1];<br>
+    $pointPos = strpos($numArray[7],&#39;.&#39;);<br>
+    $sNum = $s[$pointPos&ndash;1];<br>
+<br>
+<br>
+    <br>
+ <br>
+    $result[&quot;SET&quot;] = $numArray[1];<br>
+    $result[&quot;VALUE&quot;] = $numArray[7];<br>
+    $result[&quot;NUMBER&quot;] = $fNum.$sNum;<br>
+&nbsp;&nbsp;&nbsp;$result[&quot;Date&quot;] = $Date;<br>
+&nbsp;&nbsp;&nbsp;$result[&quot;Time&quot;] = $Time;<br>
+&nbsp;&nbsp;&nbsp;$result[&quot;FirstNum&quot;] = $fNum;<br>
+&nbsp;&nbsp;&nbsp;$result[&quot;SecondNum&quot;] = $sNum;<br>
+&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;<br>
+    echo json_encode($result);<br>
+?&gt;</body></html>
